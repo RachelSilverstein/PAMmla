@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 # INPUTS
 
 # change this unless you want to overwrite previous predictions
-pred_run_name = ("240322_example")
+pred_run_name = ("240328_ratio")
 # list of directories where the desired models are saved (if multiple, the predictions are averaged together)
 saved_model_dirs = ["./220924_select_rand_seed0_ROS",
                     "./220924_select_rand_seed2_ROS",
@@ -116,7 +116,7 @@ def select_custom(rates_df,
     assert (len(low_pams) == len(low_cutoffs))
     rates_df_copy = rates_df.copy()
     if (pam_to_max is not None) and (pam_to_min is not None): # if max and min pams are both provided then divide max by min
-        rates_df_copy["sorted_on"] = np.divide(rates_df_copy[pam_to_max], rates_df_copy[pam_to_min])
+        rates_df_copy["sorted_on"] = np.divide(np.power(10, rates_df_copy[pam_to_max]), np.power(10, rates_df_copy[pam_to_min]))
     elif pam_to_max is not None:  # otherwise just maximize or minimize
         rates_df_copy["sorted_on"] = rates_df_copy[pam_to_max]
     elif pam_to_min is not None:  # PAM to minimize so multiply by negative 1
@@ -225,7 +225,10 @@ def evolve(selection_function,
                 v = generate_random_variant(allowed_aas_list)
                 starting_variants.append(v)
 
-        mutants = mutate(starting_variants, allowed_aas_list, mutations_per_variant, variants_per_round)
+        if starting_variants == 'random' and curr_round == 1:
+            mutants = starting_variants
+        else:
+            mutants = mutate(starting_variants, allowed_aas_list, mutations_per_variant, variants_per_round)
         mutants = pd.DataFrame(mutants, columns=aa_positions)
 
         # Make predictions from all saved models and average together
@@ -285,11 +288,11 @@ vars, traj = evolve(selection_function=select_custom, # select_most_selective or
                     all_pams=pams,
                     aa_positions=all_positions,
                     pam_to_max="NGTG",
-                    pam_to_min=None,
+                    pam_to_min="NGGG",
                     high_pams=[],
                     high_cutoffs=[],
-                    low_pams=["NGGG"],
-                    low_cutoffs=[-4],
+                    low_pams=[],
+                    low_cutoffs=[],
                     starting_variants= [["D", "S", "G", "E", "R", "T"]], #  [["D", "S", "G", "E", "R", "T"]],  #  'random'
                     ramp_up_rounds=0  # number of rounds at beginning to take to ramp up selection to full strength
                     )
