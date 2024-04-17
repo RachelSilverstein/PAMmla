@@ -18,7 +18,7 @@ warnings.filterwarnings("ignore")
 # INPUTS
 
 # change this unless you want to overwrite previous predictions
-pred_run_name = ("240328_ratio")
+pred_run_name = ("240417_NGT_selectivity_example")
 # list of directories where the desired models are saved (if multiple, the predictions are averaged together)
 saved_model_dirs = ["./220924_select_rand_seed0_ROS",
                     "./220924_select_rand_seed2_ROS",
@@ -102,6 +102,7 @@ def select_custom(rates_df,
                   high_cutoffs,
                   low_pams,
                   low_cutoffs,
+                  pams_to_max_selectivity,
                   ramp_up_rounds,
                   curr_round,
                   all_pams):
@@ -111,11 +112,16 @@ def select_custom(rates_df,
     (pam to maximize, pam to minimize, [list of high PAMs], [list of k minimums for high PAMs], [list of low PAMs], [list of k maximums for low PAMs])
     """
 
-    assert ((pam_to_max is not None) or (pam_to_min is not None)) # Need to provide a PAM to maximize or minimize"
+    assert (pam_to_max is not None) or (pam_to_min is not None) or (pams_to_max_selectivity is not None)# Need to provide a PAM to maximize or minimize"
     assert (len(high_pams) == len(high_cutoffs))
     assert (len(low_pams) == len(low_cutoffs))
     rates_df_copy = rates_df.copy()
-    if (pam_to_max is not None) and (pam_to_min is not None): # if max and min pams are both provided then divide max by min
+    if pams_to_max_selectivity is not None:
+        all_rates_sum = np.sum(np.power(10, rates_df_copy[all_pams]), axis=1)
+        rates_of_interest_sum = np.sum(np.power(10, rates_df_copy[pams_to_max_selectivity]), axis=1)
+        selectivity = np.divide(rates_of_interest_sum, all_rates_sum)
+        rates_df_copy["sorted_on"] = selectivity
+    elif (pam_to_max is not None) and (pam_to_min is not None): # if max and min pams are both provided then divide max by min
         rates_df_copy["sorted_on"] = np.divide(np.power(10, rates_df_copy[pam_to_max]), np.power(10, rates_df_copy[pam_to_min]))
     elif pam_to_max is not None:  # otherwise just maximize or minimize
         rates_df_copy["sorted_on"] = rates_df_copy[pam_to_max]
@@ -198,6 +204,7 @@ def evolve(selection_function,
            high_cutoffs=[],
            low_pams=[],
            low_cutoffs=[],
+           pams_to_max_selectivity=None,
            starting_variants='random',
            ramp_up_rounds=0 # number of rounds at beginning to take to ramp up selection to full strength
            ):
@@ -250,6 +257,7 @@ def evolve(selection_function,
                                                                      high_cutoffs=high_cutoffs,
                                                                      low_pams=low_pams,
                                                                      low_cutoffs=low_cutoffs,
+                                                                     pams_to_max_selectivity=pams_to_max_selectivity,
                                                                      ramp_up_rounds=ramp_up_rounds,
                                                                      curr_round=curr_round,
                                                                      all_pams=all_pams)
@@ -287,12 +295,13 @@ vars, traj = evolve(selection_function=select_custom, # select_most_selective or
                     saved_model_dirs=saved_model_dirs,
                     all_pams=pams,
                     aa_positions=all_positions,
-                    pam_to_max="NGTG",
-                    pam_to_min="NGGG",
+                    pam_to_max=None,
+                    pam_to_min=None,
                     high_pams=[],
                     high_cutoffs=[],
                     low_pams=[],
                     low_cutoffs=[],
+                    pams_to_max_selectivity=["NGTG", "NGTA", "NGTT", "NGTC"],
                     starting_variants= [["D", "S", "G", "E", "R", "T"]], #  [["D", "S", "G", "E", "R", "T"]],  #  'random'
                     ramp_up_rounds=0  # number of rounds at beginning to take to ramp up selection to full strength
                     )
