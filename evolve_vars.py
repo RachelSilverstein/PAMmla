@@ -18,13 +18,13 @@ warnings.filterwarnings("ignore")
 # INPUTS
 
 # change this unless you want to overwrite previous predictions
-pred_run_name = ("240417_NGT_selectivity_example")
+pred_run_name = ("NGT_selectivity_example")
 # list of directories where the desired models are saved (if multiple, the predictions are averaged together)
 saved_model_dirs = ["./220924_select_rand_seed0_ROS",
                     "./220924_select_rand_seed2_ROS",
                     "./220924_select_rand_seed3_ROS"]
 output_dir = "."
-save_traj = True
+save_traj = False
 
 
 # --------------------------- --------------------------------------------------------------
@@ -291,7 +291,7 @@ vars, traj = evolve(selection_function=select_custom, # select_most_selective or
                     mutations_per_variant=4,
                     variants_per_round=1000,
                     n_best_variants_per_round=10,
-                    decay_after_n_rounds_plateau=4,
+                    decay_after_n_rounds_plateau=1,
                     saved_model_dirs=saved_model_dirs,
                     all_pams=pams,
                     aa_positions=all_positions,

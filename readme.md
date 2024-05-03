@@ -75,11 +75,14 @@ This functionality is also provided in the [PAMmla web tool](https://pammla.stre
 First, fill in the ```INPUTS``` section at the top of the ```evolve_vars.py``` script and fill in the arguments to the ```evolve()``` function call at the end of the script. 
 See parameters section below for details.
 
-The file is currently populated with inputs to evolve a variant to maximize selectivity for NGT PAMs starting from 
+The file is currently populated with inputs to evolve a variant to maximize selectivity for NGTN PAMs starting from 
 the wild type SpCas9 amino acid sequence, DSGERT.
 
 Then run the script using ```python evolve_vars.py```. This will create a folder in your running directory called 'predictions' which contains the output of the script in the form of a csv file.
 This will generate a folder called ```evolved``` in the output directory containing evolution results. 
+
+The expected output of this example run can be found in ```evolved > NGT_selectivity_example > final_variants.csv```
+
 
 ### Parameters
 
