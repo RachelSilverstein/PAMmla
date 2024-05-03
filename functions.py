@@ -147,14 +147,14 @@ def plot_heatmap(rates, name, HEATMAP_MAX, HEATMAP_MIN, axis=None):
     ex. "NAAA", "NAAC", etc. """
     nts = ["A", "C", "G", "T"]
     # plot the rates given in a heatmap
-    rates_array = np.zeros((4,16))
+    rates_array = np.zeros((4, 16))
     for i1 in range(4):
         for i2 in range(4):
             for i3 in range(4):
                     pam = "".join(["N", nts[i1], nts[i2], nts[i3]])
                     x_coord = (4*i2)+i3
                     y_coord = i1
-                    rate = rates[pam]
+                    rate = float(rates[pam].iloc[0])
                     rates_array[y_coord][x_coord] = rate
     first_half_pams = ["NA", "NC", "NG", "NT"]
     sec_half_pams = []
