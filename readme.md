@@ -1,7 +1,7 @@
 # PAMmla
 
 ### PAMmla is a neural network which predicts SpCas9 PAM preference from amino acid sequence as described in the manuscript ***"Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning"*** (Silverstein et al. 2024).
-[A web tool](pammla.streamlit.app) to facilitate making predictions and running in silico directed evolution is also available.
+[A web tool](https://pammla.streamlit.app/) to facilitate making predictions and running in silico directed evolution is also available.
 
 ![](pammla.png)
 
@@ -29,7 +29,7 @@ Installation time: ~ 5 min
 
 
 ## Making predictions from a saved model
-This functionality is also provided in the [PAMmla web tool](pammla.streamlit.app).
+This functionality is also provided in the [PAMmla web tool](https://pammla.streamlit.app/).
 
 Three pre-trained models are available: 
 ```220924_select_rand_seed0_ROS```, ```220924_select_rand_seed2_ROS```, and  ```220924_select_rand_seed3_ROS```.
@@ -67,7 +67,7 @@ Then run the script using ```python make_predictions.py```. This will create a f
 ## In Silico directed evolution
 
 In silico directed evolution powered by the PAMmla model can be performed using the ```evolve_vars.py``` script. 
-This functionality is also provided in the [PAMmla web tool](pammla.streamlit.app).
+This functionality is also provided in the [PAMmla web tool](https://pammla.streamlit.app/).
 
 ![](isde.png)
 
