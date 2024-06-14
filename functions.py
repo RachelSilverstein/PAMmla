@@ -48,6 +48,46 @@ def add_onehot(PAMDA_df, muts, encoder=None, return_aas=False):
     return new_enc
 
 
+def add_onehot_plus_pairs(PAMDA_df, muts, encoder=None, return_aas=False):
+    ### Add onehot encoding of amino acids AND ALL PAIRWISE COMBOS to a PAMDA data frame
+    ###- mutates the PAMDA df in place, does not return a df
+    ### if no encoder is provided, a new one will be fit
+    ### return the fitted encoder to be used later
+    PROTEIN_VOCAB = [aa for aa in "GPAVLIMCFYWHKRQNEDST"]
+    PAIRWISE_VOCAB = [aa1 + aa2 for aa1 in PROTEIN_VOCAB for aa2 in PROTEIN_VOCAB]
+    PAMDA_df, pairwise_colnames = add_pairwise_features(PAMDA_df, muts)
+    feature_cols = muts + pairwise_colnames
+    if return_aas:
+        return PROTEIN_VOCAB
+    if encoder is None:  # fit a new encoder for single and pairwise AAs
+        categories_single = [PROTEIN_VOCAB for i in range(len(muts))]
+        n = int(len(muts) * (len(muts) - 1) / 2)  # number of pairwise categories
+        categories_double = [PAIRWISE_VOCAB for i in range(n)]
+        all_categories = categories_single + categories_double
+        new_enc = OneHotEncoder(categories=all_categories)
+        new_enc.fit(PAMDA_df[feature_cols])
+
+    else:
+        new_enc = encoder
+    muts_one_hot = new_enc.transform(PAMDA_df[feature_cols]).toarray()
+    PAMDA_df["muts_encoded"] = list(muts_one_hot)
+    return new_enc
+
+
+def add_pairwise_features(PAMDA_df, muts):
+    """Add columns to PAMDA dataframe with all pairwise combos of amino acids at each position"""
+    pairwise_colnames = []
+    for i in range(len(muts)):
+        pos1 = muts[i]
+        for j in range(i + 1, len(muts)):
+            pos2 = muts[j]
+            colname = pos1 + "_" + pos2
+            pairwise_colnames.append(colname)
+            PAMDA_df[colname] = PAMDA_df[pos1].str.cat(PAMDA_df[pos2])
+    return PAMDA_df, pairwise_colnames
+
+
+
 def add_georgiev(PAMDA_df, muts, encoder=None, return_aas=False):
     ### Add Georgiev encoding of amino acids to a PAMDA data frame - mutates the PAMDA df in place, does not return a df
     ### returns None
@@ -126,10 +166,11 @@ def predict_from_saved_model(saved_model_dir, input_df, DATA_MEAN, DATA_STD, pam
         # get predictions from loaded model
         preds = model.predict(muts_one_hot, batch_size=len(muts_one_hot))
         preds = unnormalize(preds, DATA_MEAN, DATA_STD)
-        preds_df = pd.DataFrame(list(preds), columns=pams)
+        preds_df = pd.DataFrame(list(preds), columns=pams).round(decimals=2)
         output_df = input_df.copy()
         for pam in pams:
             output_df[pam] = list(preds_df[pam])
+        output_df = output_df.round(decimals=2)
         return output_df
     else: # PAM to AA model
         preds = model.predict(input_df[pams], batch_size=len(input_df))
