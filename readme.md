@@ -1,6 +1,6 @@
 # PAMmla
 
-### PAMmla is a neural network which predicts SpCas9 PAM preference from amino acid sequence as described in the manuscript ***"Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning"*** (Silverstein et al. 2024).
+### PAMmla is a set of machine learnign models to predict SpCas9 PAM preference from amino acid sequence as described in the manuscript ***"Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning"*** (Silverstein et al. 2024).
 [A web tool](https://pammla.streamlit.app/) to facilitate making predictions and running in silico directed evolution is also available.
 
 ![](pammla.png)
@@ -31,10 +31,14 @@ Installation time: ~ 5 min
 ## Making predictions from a saved model
 This functionality is also provided in the [PAMmla web tool](https://pammla.streamlit.app/).
 
-Three pre-trained models are available: 
-```220924_select_rand_seed0_ROS```, ```220924_select_rand_seed2_ROS```, and  ```220924_select_rand_seed3_ROS```.
-Predictions from these models can be generated using the ```make_predictions.py``` script. These models are three
-versions of PAMmla trained on different train/test splits and should behave similarly. They correspond to the three splits in the manuscript.
+Three pre-trained neural network models are available: 
+```220924_NN_rand_seed0_ROS```, ```220924_NN_rand_seed2_ROS```, and  ```220924_NN_rand_seed3_ROS```.
+These models are three instances of training the ```AA_to_PAM_NN.ipnb``` model using different train/test splits and should behave similarly. They correspond to the 3 train/test splits in the manuscript Silverstein et al. 2024.
+
+A pre-trained linear model is also provided, ```240614_linear_optimized_seed0_ROS```. This is the optimized linear model
+described in Silverstein et al. 2024 and performs with similar accuracy to neural network based models. 
+
+Predictions from each of these models can be generated using the ```make_predictions.py``` script.
 
 First, fill in the ```INPUTS``` section at the top of the ```make_predictions.py``` script. See parameters section below for details.
 The file is currently populated with inputs to generate example predictions for SpG (LWKQQR) and wild type SpCas9 (DSGERT).
@@ -201,7 +205,13 @@ vars, traj = evolve(selection_function=select_custom,
 ## PAMmla model source code
 
 Source code for pre-processing the training data, training the model, and evaluating the model on the test set is provided in the form of a Jupyter notebook, `AA_to_PAM_NN.ipynb`.
-The models described in the manuscript, "Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning", can be reproduced
+The majority of the data in the manuscript, with the exception of feature importance analyses, were generated using the neural network based model.
+The NN models described in the manuscript, "Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning", can be reproduced
 by running the notebook as-is with random seed set to either 0, 2, or 3 (representing the three train test splits used for the three provided saved models).
 Minor differences compared to saved models may be observed due to differing random states for model weight initiation. To reproduce results exactly, generate predictions from the three saved models: 
-```220924_select_rand_seed0_ROS```, ```220924_select_rand_seed2_ROS```, and  ```220924_select_rand_seed3_ROS```.
+```220924_NN_rand_seed0_ROS```, ```220924_NN_rand_seed2_ROS```, and  ```220924_NN_rand_seed3_ROS```.
+
+The optimized linear model described in the manuscript can be reproduced by running the Jupyter notebook `AA_to_PAM_linear.ipynb` as-is.
+Further exploration of feature importance is provided in the ```feature_exploration.ipynb``` notebook.
+
+

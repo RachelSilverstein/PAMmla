@@ -14,7 +14,7 @@ from itertools import product
 pred_run_name = "240604_64_million_2_decimals"
 # directory where the desired models are saved
 # will average together predictions from these models
-saved_model_dirs = ["./220924_select_rand_seed0_ROS", "./220924_select_rand_seed0_ROS", "./220924_select_rand_seed0_ROS"]
+saved_model_dirs = ["./220924_NN_rand_seed0_ROS", "./220924_NN_rand_seed0_ROS", "./220924_NN_rand_seed0_ROS"]
 batch_size = 100000  # number of predictions to make in parallel
 
 

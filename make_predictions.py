@@ -13,7 +13,7 @@ from itertools import product
 # change this unless you want to overwrite previous predictions
 pred_run_name = "240322_example"
 # directory where the desired model is saved
-saved_model_dir = "./220924_select_rand_seed0_ROS" # change this ti use different models
+saved_model_dir = "./220924_NN_rand_seed0_ROS" # change this ti use different models
 
 choose_muts = True
 random_muts = False

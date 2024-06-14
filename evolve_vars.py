@@ -20,9 +20,9 @@ warnings.filterwarnings("ignore")
 # change this unless you want to overwrite previous predictions
 pred_run_name = ("NGT_selectivity_example")
 # list of directories where the desired models are saved (if multiple, the predictions are averaged together)
-saved_model_dirs = ["./220924_select_rand_seed0_ROS",
-                    "./220924_select_rand_seed2_ROS",
-                    "./220924_select_rand_seed3_ROS"]
+saved_model_dirs = ["./220924_NN_rand_seed0_ROS",
+                    "./220924_NN_rand_seed2_ROS",
+                    "./220924_NN_rand_seed3_ROS"]
 output_dir = "."
 save_traj = False
 
