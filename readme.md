@@ -97,10 +97,10 @@ The expected output of this example run can be found in ```evolved > NGT_selecti
 ```saved_model_dirs```: List of directories containing the models to be used to generate predictions. If more than one
 directory is listed, the predictions from all listed models will be averaged together to perform evolution.
 
-Ex. To average predictions from all 3 pre-trained models:
+Ex. To average predictions from all 3 pre-trained NN models:
 
 ```
-saved_model_dirs = ["./220924_select_rand_seed0_ROS", "./220924_select_rand_seed2_ROS", "./220924_select_rand_seed3_ROS"]                
+saved_model_dirs = ["./220924_NN_rand_seed0_ROS", "./220924_NN_rand_seed2_ROS", "./220924_NN_rand_seed3_ROS"]                
 ```
 
 ```save_traj``` : True or False. Whether to save the entire evolution trajectory (outputs after each round of selections) 
