@@ -25,7 +25,7 @@ Installation time: ~ 5 min
 
 4. Add the PAMmla_env environment to ipykernel (only necessary if using the jupyter notebook to train PAMmla model)
 
-    ```python -m ipykernel install --user –name=PAMmla_env```
+    ```python -m ipykernel install --user –-name=PAMmla_env```
 
 
 ## Making predictions from a saved model
@@ -212,6 +212,6 @@ Minor differences compared to saved models may be observed due to differing rand
 ```220924_NN_rand_seed0_ROS```, ```220924_NN_rand_seed2_ROS```, and  ```220924_NN_rand_seed3_ROS```.
 
 The optimized linear model described in the manuscript can be reproduced by running the Jupyter notebook `AA_to_PAM_linear.ipynb` as-is.
-Further exploration of feature importance is provided in the ```feature_exploration.ipynb``` notebook.
+Further exploration of feature importance is also provided.
 
 

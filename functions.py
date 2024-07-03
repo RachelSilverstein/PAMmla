@@ -59,20 +59,33 @@ def add_onehot_plus_pairs(PAMDA_df, muts, encoder=None, return_aas=False):
     feature_cols = muts + pairwise_colnames
     if return_aas:
         return PROTEIN_VOCAB
-    if encoder is None:  # fit a new encoder for single and pairwise AAs
-        categories_single = [PROTEIN_VOCAB for i in range(len(muts))]
-        n = int(len(muts) * (len(muts) - 1) / 2)  # number of pairwise categories
-        categories_double = [PAIRWISE_VOCAB for i in range(n)]
-        all_categories = categories_single + categories_double
+    categories_single = [PROTEIN_VOCAB for i in range(len(muts))]
+    n = int(len(muts) * (len(muts) - 1) / 2)  # number of pairwise categories
+    categories_double = [PAIRWISE_VOCAB for i in range(n)]
+    all_categories = categories_single + categories_double
+    if encoder == None:
         new_enc = OneHotEncoder(categories=all_categories)
         new_enc.fit(PAMDA_df[feature_cols])
-
     else:
         new_enc = encoder
+
     muts_one_hot = new_enc.transform(PAMDA_df[feature_cols]).toarray()
     PAMDA_df["muts_encoded"] = list(muts_one_hot)
-    return new_enc
 
+    full_feature_names = get_full_feature_names(feature_cols, all_categories)
+
+    return new_enc, full_feature_names
+
+
+def get_full_feature_names(category_names, category_values):
+    names = []
+    for i in range(len(category_names)):
+        cat = category_names[i]
+        vals = category_values[i]
+        for j in range(len(vals)):
+            val = vals[j]
+            names.append(str(cat) + "_" + str(val))
+    return names
 
 def add_pairwise_features(PAMDA_df, muts):
     """Add columns to PAMDA dataframe with all pairwise combos of amino acids at each position"""
