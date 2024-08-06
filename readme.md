@@ -35,9 +35,6 @@ Three pre-trained neural network models are available:
 ```220924_NN_rand_seed0_ROS```, ```220924_NN_rand_seed2_ROS```, and  ```220924_NN_rand_seed3_ROS```.
 These models are three instances of training the ```AA_to_PAM_NN.ipnb``` model using different train/test splits and should behave similarly. They correspond to the 3 train/test splits in the manuscript Silverstein et al. 2024.
 
-A pre-trained linear model is also provided, ```240614_linear_optimized_seed0_ROS```. This is the optimized linear model
-described in Silverstein et al. 2024 and performs with similar accuracy to neural network based models. 
-
 Predictions from each of these models can be generated using the ```make_predictions.py``` script.
 
 First, fill in the ```INPUTS``` section at the top of the ```make_predictions.py``` script. See parameters section below for details.
