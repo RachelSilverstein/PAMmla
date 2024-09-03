@@ -202,7 +202,7 @@ vars, traj = evolve(selection_function=select_custom,
 ## PAMmla model source code
 
 Source code for pre-processing the training data, training the model, and evaluating the model on the test set is provided in the form of a Jupyter notebook, `AA_to_PAM_NN.ipynb`.
-The majority of the data in the manuscript, with the exception of feature importance analyses, were generated using the neural network based model.
+Data in the manuscript were generated using the neural network based model unless stated otherwise.
 The NN models described in the manuscript, "Design of custom CRISPR-Cas9 PAM variant enzymes via machine learning", can be reproduced
 by running the notebook as-is with random seed set to either 0, 2, or 3 (representing the three train test splits used for the three provided saved models).
 Minor differences compared to saved models may be observed due to differing random states for model weight initiation. To reproduce results exactly, generate predictions from the three saved models: 
